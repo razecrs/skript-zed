@@ -1,0 +1,6 @@
+name = "Skript"
+grammar = "skript" # We will use a pseudo-grammar name
+path_suffixes = ["sk"]
+line_comments = ["# "]
+tab_size = 4
+hard_tabs = true

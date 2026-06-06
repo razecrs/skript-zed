@@ -1,0 +1,15 @@
+id = "skript"
+name = "Skript"
+version = "0.1.2"
+schema_version = 1
+authors = ["Raze <raze.crs@proton.me>"]
+description = "Elite Skript development for Zed."
+repository = "https://github.com/razecrs/skript-zed"
+
+[language_servers.skript-lsp]
+name = "Skript LSP"
+languages = ["Skript"]
+
+[grammars.skript]
+repository = "https://github.com/tree-sitter/tree-sitter-python"
+rev = "4f26b03369a4891152a5f7823f66c06a38626b9a"
