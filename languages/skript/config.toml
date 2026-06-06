@@ -1,5 +1,5 @@
 name = "Skript"
-grammar = "skript" # We will use a pseudo-grammar name
+grammar = "python"
 path_suffixes = ["sk"]
 line_comments = ["# "]
 tab_size = 4
