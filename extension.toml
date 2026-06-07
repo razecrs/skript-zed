@@ -1,6 +1,6 @@
 id = "skript"
 name = "Skript"
-version = "0.1.2"
+version = "0.1.3"
 schema_version = 1
 authors = ["Raze <raze.crs@proton.me>"]
 description = "Elite Skript development for Zed."
@@ -9,7 +9,3 @@ repository = "https://github.com/razecrs/skript-zed"
 [language_servers.skript-lsp]
 name = "Skript LSP"
 languages = ["Skript"]
-
-[grammars.skript]
-repository = "https://github.com/tree-sitter/tree-sitter-json"
-commit = "3368297b817e0892095f9730f14fa76722881b29"
