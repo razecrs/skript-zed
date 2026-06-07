@@ -37,10 +37,61 @@ def handle_request(request):
                     "hoverProvider": True,
                     "documentSymbolProvider": True,
                     "documentFormattingProvider": True,
-                    "renameProvider": True
+                    "renameProvider": True,
+                    "semanticTokensProvider": {
+                        "legend": {
+                            "tokenTypes": ["keyword", "variable", "function", "string", "comment", "number"],
+                            "tokenModifiers": []
+                        },
+                        "full": True
+                    }
                 }
             }
         })
+    
+    elif method == "textDocument/semanticTokens/full":
+        uri = params["textDocument"]["uri"]
+        text = DOCUMENTS.get(uri, "")
+        if not text:
+            send_response({"id": request["id"], "result": {"data": []}})
+            return
+            
+        data = []
+        lines = text.splitlines()
+        last_line = 0
+        last_start = 0
+        
+        for i, line in enumerate(lines):
+            # Simple Regex based tokenization for colors
+            tokens = [] # (start, length, type_idx)
+            
+            # Comments
+            if "#" in line:
+                start = line.find("#")
+                tokens.append((start, len(line) - start, 4))
+            else:
+                # Strings
+                for m in re.finditer(r'"(.*?)"', line):
+                    tokens.append((m.start(), len(m.group(0)), 3))
+                # Variables
+                for m in re.finditer(r'\{(.+?)\}', line):
+                    tokens.append((m.start(), len(m.group(0)), 1))
+                # Keywords (Declarations)
+                for m in re.finditer(r'\b(on|command|function|options|if|else|stop|wait|loop|set|give|make|enchant|play|draw|show)\b', line):
+                    # Check if not inside string/comment (basic check)
+                    tokens.append((m.start(), len(m.group(0)), 0))
+            
+            # Sort tokens by start position
+            tokens.sort()
+            
+            for start, length, ttype in tokens:
+                delta_line = i - last_line
+                delta_start = start if delta_line > 0 else start - last_start
+                data.extend([delta_line, delta_start, length, ttype, 0])
+                last_line = i
+                last_start = start
+                
+        send_response({"id": request["id"], "result": {"data": data}})
     
     elif method == "textDocument/rename":
         uri = params["textDocument"]["uri"]
